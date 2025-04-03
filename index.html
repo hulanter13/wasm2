@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v86 UEFI Boot</title>
+    <script src="/build/libv86.js"></script>
+</head>
+<body>
+    <div id="screen"></div>
+    <script>
+        var emulator = new V86Starter({
+            wasm_path: "/build/v86.wasm",
+            memory_size: 2048 * 1024 * 1024,  // 記憶體大小 512MB
+            vga_memory_size: 16 * 1024 * 1024,
+            screen_container: document.getElementById("screen"),
+            bios: {
+                url: "/bios/seabios.bin"  // 使用 UEFI BIOS
+            },
+            cdrom: {
+                url: "/fps/index.iso"  // 你的 UEFI ISO
+            },
+            autostart: true
+        });
+
+        // 監聽全螢幕事件
+        document.body.addEventListener("click", function () {
+            var canvas = document.querySelector("canvas");
+            if (canvas.requestFullscreen) {
+                canvas.requestFullscreen();
+            } else if (canvas.mozRequestFullScreen) {
+                canvas.mozRequestFullScreen();
+            } else if (canvas.webkitRequestFullscreen) {
+                canvas.webkitRequestFullscreen();
+            } else if (canvas.msRequestFullscreen) {
+                canvas.msRequestFullscreen();
+            }
+        });
+    </script>
+</body>
+</html>
